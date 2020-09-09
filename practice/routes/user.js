@@ -47,6 +47,39 @@ router.post('/signup', async (req, res) => {
       }));
 });
 
+//로그인
+router.post('/signin',async(req,res)=>{
+  const{
+    id,
+    password
+  } = req.body;
+  //request data 확인 - 없다면 null value 반환하기
+  if(!id || !password){
+    res.status(statusCode.BAD_REQUEST)
+      .send(util.fail(statusCode.BAD_REQUEST,resMessage.NULL_VALUE));
+    return;
+  }
+  
+  const user = UserModel.filter(user => user.id == id)
+  //존재하는 아이디 확인 - 없다면 no user 반환하기
+  if (user.length == 0){
+    res.status(statusCode.BAD_REQUEST)
+      .send(util.fail(statusCode.BAD_REQUEST,resMessage.NO_USER));
+    return;
+  }
 
+  //비밀번호 확인 - 없다면 miss match 반환하기
+  if (user[0].password !== password){
+    res.status(statusCode.BAD_REQUEST)
+      .send(util.fail(statusCode.BAD_REQUEST,resMessage.MISS_MATCH_PW));
+    return;
+  }
+
+
+  //성공 확인 - 성공시에 login success와 userid 반환하기
+  res.send(statusCode.OK)
+    .send(util.success(statusCode.OK,resMessage.READ_PROFILE_SUCCESS,
+      {  userId : id }))
+})
 
 module.exports = router;
