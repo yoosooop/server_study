@@ -11,5 +11,6 @@ router.get('/', function (req, res, next) {
 //생성한 폴더의 index에 접근하기 위해서
 router.use('/api', require('./api'))
 router.use('/blog', require('./blog'))
+router.use('/user', require('./user'));
 
 module.exports = router;
